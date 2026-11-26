@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAJJOS | Personal</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#171717;
+  color:#fffaf0;
+  font-family:Arial,sans-serif;
+}
+[hidden]{display:none!important}
+header{
+  background:#202020;
+  padding:22px 16px;
+  text-align:center;
+  border-bottom:3px solid #e87524;
+}
+.logo{
+  color:#e87524;
+  font-size:35px;
+  font-weight:900;
+  letter-spacing:3px;
+}
+.subtitulo{
+  margin-top:6px;
+  color:#c9c9c9;
+  font-size:13px;
+}
+main{
+  max-width:750px;
+  margin:auto;
+  padding:20px 15px;
+}
+.tarjeta{
+  background:#252525;
+  padding:22px;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+h2{margin-top:0}
+input,button{
+  width:100%;
+  padding:14px;
+  margin:7px 0;
+  border-radius:9px;
+  font-size:16px;
+}
+input{
+  background:#fffaf0;
+  color:#171717;
+  border:0;
+}
+button{
+  background:#e87524;
+  border:0;
+  color:#171717;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled{opacity:.6}
+.secundario{
+  background:#383838;
+  color:white;
+}
+.mensaje{
+  color:#f6c477;
+  font-size:14px;
+  line-height:1.5;
+}
+.mesas{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.mesa{
+  text-align:center;
+  border:1px solid #555;
+  background:#303030;
+  border-radius:12px;
+  padding:20px 8px;
+}
+.mesa strong{
+  display:block;
+  font-size:20px;
+  margin-bottom:9px;
+}
+.libre{color:#8ee0a1}
+.ocupada{color:#ffc477}
+.pedido{
+  padding:13px 0;
+  border-bottom:1px solid #444;
+}
+.pedido:last-child{border:0}
+small{color:#bbb}
+@media(min-width:550px){
+  .mesas{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">MAJJOS</div>
+  <div class="subtitulo">
+    SISTEMA DE MESERO Y CAJA
+  </div>
+</header>
+
+<main>
+
+<section id="acceso" class="tarjeta">
+  <h2>Iniciar sesión</h2>
+  <p>Ingresa con tu usuario de MAJJOS.</p>
+
+  <form id="formulario">
+    <input
+      id="correo"
+      type="email"
+      placeholder="Correo electrónico"
+      autocomplete="username"
+      required
+    >
+    <input
+      id="clave"
+      type="password"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+      required
+    >
+    <button id="entrar" type="submit">
+      INGRESAR
+    </button>
+  </form>
+
+  <p id="mensaje" class="mensaje"></p>
+</section>
+
+<section id="panel" hidden>
+  <div class="tarjeta">
+    <h2 id="tituloPanel"></h2>
+    <p id="usuario"></p>
+    <button id="actualizar" class="secundario">
+      Actualizar información
+    </button>
+    <button id="salir" class="secundario">
+      Cerrar sesión
+    </button>
+    <p id="estado" class="mensaje"></p>
+  </div>
+
+  <div id="seccionMesas" class="tarjeta" hidden>
+    <h2>Mesas del restaurante</h2>
+    <div id="listaMesas" class="mesas"></div>
+  </div>
+
+  <div id="seccionPedidos" class="tarjeta">
+    <h2>Pedidos abiertos</h2>
+    <div id="listaPedidos"></div>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const URL_SUPABASE =
+  "https://ytzwtawidgvterrselkd.supabase.co";
+
+const CLAVE_PUBLICA =
+  "sb_publishable_9HnDHalyoRhcNllJgtRewQ_-F8ydzGZ";
+
+const db = window.supabase.createClient(
+  URL_SUPABASE,
+  CLAVE_PUBLICA
+);
+
+const elemento = id =>
+  document.getElementById(id);
+
+let rolActual = "";
+
+elemento("formulario").addEventListener(
+  "submit",
+  async function(evento){
+    evento.preventDefault();
+
+    const boton = elemento("entrar");
+    boton.disabled = true;
+    elemento("mensaje").textContent =
+      "Verificando acceso...";
+
+    try{
+      const correo =
+        elemento("correo").value.trim();
+
+      const clave = elemento("clave").value;
+
+      const {error} =
+        await db.auth.signInWithPassword({
+          email:correo,
+          password:clave
+        });
+
+      if(error) throw error;
+
+      elemento("clave").value = "";
+      await verificarUsuario();
+
+    }catch(error){
+      elemento("mensaje").textContent =
+        "No se pudo ingresar: " + error.message;
+    }finally{
+      boton.disabled = false;
+    }
+  }
+);
+
+async function verificarUsuario(){
+  const {data,error} = await db.auth.getUser();
+
+  if(error || !data.user){
+    elemento("acceso").hidden = false;
+    elemento("panel").hidden = true;
+    return;
+  }
+
+  const usuario = data.user;
+
+  const resultado = await db
+    .from("majjos_staff")
+    .select("rol,activo")
+    .eq("user_id",usuario.id)
+    .maybeSingle();
+
+  if(
+    resultado.error ||
+    !resultado.data ||
+    !resultado.data.activo
+  ){
+    await db.auth.signOut();
+    elemento("mensaje").textContent =
+      "Este usuario no tiene un perfil activo.";
+    elemento("acceso").hidden = false;
+    elemento("panel").hidden = true;
+    return;
+  }
+
+  rolActual = resultado.data.rol;
+
+  const nombres = {
+    mesero:"MAJJOS Mesero",
+    caja:"MAJJOS Caja",
+    administrador:"MAJJOS Administrador"
+  };
+
+  elemento("tituloPanel").textContent =
+    nombres[rolActual] || "MAJJOS Personal";
+
+  elemento("usuario").textContent = usuario.email;
+
+  elemento("acceso").hidden = true;
+  elemento("panel").hidden = false;
+
+  elemento("seccionMesas").hidden =
+    rolActual === "caja";
+
+  await cargarInformacion();
+}
+
+async function cargarInformacion(){
+  elemento("estado").textContent =
+    "Consultando Supabase...";
+
+  try{
+    const respuesta = await db
+      .from("majjos_orders")
+      .select(
+        "id,tipo,mesa_id,nombre_cliente,estado"
+      )
+      .eq("estado","abierto")
+      .order("creado_en",{ascending:false});
+
+    if(respuesta.error) throw respuesta.error;
+
+    const pedidos = respuesta.data || [];
+
+    if(rolActual !== "caja"){
+      const mesasRespuesta = await db
+        .from("majjos_tables")
+        .select("id,nombre")
+        .order("id");
+
+      if(mesasRespuesta.error)
+        throw mesasRespuesta.error;
+
+      const ocupadas = new Set(
+        pedidos
+          .filter(p => p.tipo === "mesa")
+          .map(p => p.mesa_id)
+      );
+
+      const contenedor =
+        elemento("listaMesas");
+
+      contenedor.replaceChildren();
+
+      for(const mesa of mesasRespuesta.data){
+        const tarjeta =
+          document.createElement("div");
+
+        tarjeta.className = "mesa";
+
+        const nombre =
+          document.createElement("strong");
+
+        nombre.textContent = mesa.nombre;
+
+        const estado =
+          document.createElement("span");
+
+        const ocupada = ocupadas.has(mesa.id);
+
+        estado.textContent =
+          ocupada ? "Ocupada" : "Disponible";
+
+        estado.className =
+          ocupada ? "ocupada" : "libre";
+
+        tarjeta.append(nombre,estado);
+        contenedor.append(tarjeta);
+      }
+    }
+
+    const lista = elemento("listaPedidos");
+    lista.replaceChildren();
+
+    if(pedidos.length === 0){
+      lista.textContent =
+        "No hay pedidos abiertos.";
+    }
+
+    for(const pedido of pedidos){
+      const fila =
+        document.createElement("div");
+
+      fila.className = "pedido";
+
+      const descripcion =
+        pedido.tipo === "mesa"
+          ? "Mesa " + pedido.mesa_id
+          : pedido.tipo === "domicilio"
+          ? "Domicilio"
+          : "Para llevar";
+
+      const titulo =
+        document.createElement("strong");
+
+      titulo.textContent = descripcion;
+
+      const detalle =
+        document.createElement("div");
+
+      detalle.textContent =
+        pedido.nombre_cliente ||
+        "Pedido pendiente de cobro";
+
+      const referencia =
+        document.createElement("small");
+
+      referencia.textContent =
+        "Pedido: " + pedido.id.slice(0,8);
+
+      fila.append(titulo,detalle,referencia);
+      lista.append(fila);
+    }
+
+    elemento("estado").textContent =
+      "Conectado con Supabase.";
+
+  }catch(error){
+    elemento("estado").textContent =
+      "Error al consultar datos: " +
+      error.message;
+  }
+}
+
+elemento("actualizar").onclick =
+  cargarInformacion;
+
+elemento("salir").onclick =
+  async function(){
+    await db.auth.signOut();
+    rolActual = "";
+    elemento("panel").hidden = true;
+    elemento("acceso").hidden = false;
+    elemento("mensaje").textContent = "";
+  };
+
+verificarUsuario().catch(error => {
+  elemento("mensaje").textContent =
+    "Error de conexión: " + error.message;
+});
+</script>
+
+</body>
+</html>
