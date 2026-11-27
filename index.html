@@ -1,416 +1,264 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAJJOS | Personal</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#171717">
+<title>MAJJOS | Mesero y Caja</title>
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:#171717;
-  color:#fffaf0;
-  font-family:Arial,sans-serif;
-}
-[hidden]{display:none!important}
-header{
-  background:#202020;
-  padding:22px 16px;
-  text-align:center;
-  border-bottom:3px solid #e87524;
-}
-.logo{
-  color:#e87524;
-  font-size:35px;
-  font-weight:900;
-  letter-spacing:3px;
-}
-.subtitulo{
-  margin-top:6px;
-  color:#c9c9c9;
-  font-size:13px;
-}
-main{
-  max-width:750px;
-  margin:auto;
-  padding:20px 15px;
-}
-.tarjeta{
-  background:#252525;
-  padding:22px;
-  border-radius:15px;
-  margin-bottom:15px;
-}
-h2{margin-top:0}
-input,button{
-  width:100%;
-  padding:14px;
-  margin:7px 0;
-  border-radius:9px;
-  font-size:16px;
-}
-input{
-  background:#fffaf0;
-  color:#171717;
-  border:0;
-}
-button{
-  background:#e87524;
-  border:0;
-  color:#171717;
-  font-weight:bold;
-  cursor:pointer;
-}
-button:disabled{opacity:.6}
-.secundario{
-  background:#383838;
-  color:white;
-}
-.mensaje{
-  color:#f6c477;
-  font-size:14px;
-  line-height:1.5;
-}
-.mesas{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-.mesa{
-  text-align:center;
-  border:1px solid #555;
-  background:#303030;
-  border-radius:12px;
-  padding:20px 8px;
-}
-.mesa strong{
-  display:block;
-  font-size:20px;
-  margin-bottom:9px;
-}
-.libre{color:#8ee0a1}
-.ocupada{color:#ffc477}
-.pedido{
-  padding:13px 0;
-  border-bottom:1px solid #444;
-}
-.pedido:last-child{border:0}
-small{color:#bbb}
-@media(min-width:550px){
-  .mesas{grid-template-columns:repeat(4,1fr)}
-}
+:root{--black:#171717;--white:#fffaf0;--paper:#f7f5f1;--orange:#e87524;--gold:#f2ad00;--ink:#252525;--line:#e8e0d5;--green:#157b4c;--brown:#a96217}
+*{box-sizing:border-box} [hidden]{display:none!important}body{margin:0;color:var(--ink);background:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.head{background:var(--black);color:var(--white);min-height:85px;padding:13px max(17px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{color:var(--orange);font-weight:1000;font-size:36px;letter-spacing:-1.8px;line-height:1}.brand b{color:#e6b52d}.head-right{text-align:right;font-size:12px;font-weight:800;color:#f7c45f;line-height:1.55}.head-right small{display:block;color:#ddd;font-size:10px}.head-right button{font-size:11px;padding:7px 10px;min-height:32px;margin-top:4px;border:1px solid #555;border-radius:9px;background:#303030;color:#fff}
+.page{max-width:800px;margin:auto;padding:18px 18px 32px}.eyebrow{color:#78736b;font-size:12px;letter-spacing:1.4px;font-weight:850}h1{font-size:31px;line-height:1.1;letter-spacing:-1px;margin:5px 0 20px}h2{font-size:22px;letter-spacing:-.3px;margin:21px 0 15px}h3{font-size:17px;margin:12px 0}.muted{color:#78736b;font-size:14px;line-height:1.5}.tiny{font-size:12px}.right{text-align:right}.pill{font-size:13px;display:inline-block;background:#efebe3;border-radius:22px;padding:9px 13px;font-weight:850;white-space:nowrap}.title-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.note{background:#fff1d3;color:#745417;border:1px solid #edd49f;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.5;margin-bottom:17px}.status{font-size:13px;color:#916328;margin:12px 0;min-height:17px;line-height:1.5}.error{color:#b32d20!important}.ok{color:#087847!important}
+.tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.table{border:1px solid var(--line);background:#fff;min-height:142px;border-radius:22px;padding:19px 17px;text-align:left;box-shadow:0 2px 7px #00000010;display:flex;flex-direction:column;justify-content:center;width:100%}.table-top{display:flex;align-items:center;justify-content:space-between;gap:4px}.table-title{font-size:22px;letter-spacing:-.5px;font-weight:850}.table-icon{color:#bbb;font-size:25px;opacity:.55}.table-state{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:750;color:var(--green);margin-top:9px}.table-state.busy{color:var(--brown)}.dot{width:13px;height:13px;border-radius:50%;background:currentColor;flex-shrink:0}.shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:24px 0 28px}.shortcut{border:none;border-radius:22px;min-height:116px;text-align:left;background:#242424;color:#fff;padding:18px 19px;font-weight:850;font-size:18px;line-height:1.35}.shortcut.gold{background:#f2ad00;color:#242424}.shortcut span{display:block;font-size:27px;margin-bottom:8px}.outline{border:0;border-radius:11px;background:#efe8df;color:#222;padding:12px 16px;font-weight:750;min-height:44px}.primary{border:0;border-radius:12px;background:#ff861a;color:#171717;font-weight:850;padding:14px 18px;min-height:48px}.line-btn{background:#fff;color:#242424;border:1px solid var(--line);border-radius:12px;min-height:42px;padding:10px;text-align:left;width:100%;font-size:15px}.open-order{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px;margin:10px 0;background:#fff;border:1px solid var(--line);border-radius:14px;text-align:left;width:100%}.open-order strong{display:block}.open-order small{display:block;color:#777;margin-top:4px}.card{border-radius:18px;border:1px solid var(--line);background:#fff;padding:17px;margin:12px 0;box-shadow:0 2px 6px #00000008}label{display:block;font-size:13px;font-weight:800;color:#615950;margin:13px 0 7px}.field{width:100%;min-height:48px;background:#fff;color:#222;border:1px solid #d6cbbd;border-radius:11px;padding:12px 13px;font-size:16px}.field.dark{background:#fffaf0}.fields{display:grid;grid-template-columns:1fr;gap:4px}.category-scroll{display:flex;gap:8px;overflow-x:auto;padding:13px 0 16px;scrollbar-width:thin}.category{flex-shrink:0;border:1px solid #e4dace;background:#fff;color:#222;border-radius:23px;padding:11px 14px;font-size:13px;font-weight:800;min-height:42px}.category.selected{background:#1c1c1c;color:#fff;border-color:#1c1c1c}.product{display:flex;align-items:center;gap:12px;border-top:1px solid #efe7db;min-height:83px;padding:12px 0}.product strong{font-size:15px;display:block}.product small{font-size:13px;color:#94672e;display:block;margin-top:5px}.plus{border:0;background:#ff871c;color:#161616;border-radius:13px;font-weight:900;font-size:28px;width:48px;height:48px;flex-shrink:0;margin-left:auto}.cart-bar{position:fixed;z-index:30;bottom:0;left:0;right:0;background:#fff;padding:10px 14px max(10px,env(safe-area-inset-bottom));box-shadow:0 -4px 18px #0002}.cart-bar button{max-width:760px;margin:auto;width:100%;display:flex;justify-content:space-between;align-items:center;gap:9px}.badge-count{background:#242424;color:#fff;border-radius:7px;padding:5px 8px;font-size:13px}.with-cart{padding-bottom:115px}.modal{position:fixed;z-index:70;inset:0;background:#000a;display:flex;align-items:flex-end;justify-content:center}.sheet{background:#fff;color:#222;border-radius:23px 23px 0 0;max-width:680px;width:100%;max-height:93dvh;overflow-y:auto;padding:18px 17px max(22px,env(safe-area-inset-bottom));box-shadow:0 -6px 30px #0002}.sheet-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #f0e6da;padding-bottom:12px}.sheet-title h2{margin:0;font-size:21px}.sheet .close{width:42px;min-width:42px;padding:9px}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.choice{border:1px solid #d9cfc5;border-radius:11px;background:#f7f3ee;color:#222;text-align:left;padding:14px 12px;min-height:85px;font-size:15px;font-weight:800}.choice.picked{border:2px solid #e87524;background:#fff1db}.choice small{display:block;color:#876027;font-size:13px;margin-top:10px}.qty{display:flex;align-items:center;gap:14px}.qty button{font-size:23px;border-radius:9px;background:#f2ece4;border:1px solid #d9cebf;color:#222;width:44px;height:44px}.qty b{min-width:18px;text-align:center}.sheet-footer{display:flex;gap:9px;margin-top:20px}.sheet-footer button{flex:1}.sheet-footer .primary{flex:1.4}.row-item{padding:13px 0;border-bottom:1px solid #ede5d9;line-height:1.4}.row-item strong{font-size:14px}.row-item small{display:block;color:#777;margin:4px 0}.qty-right{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:9px}.qty-right button{min-width:40px;height:38px;border:1px solid #ded5c9;background:#f4efe8;border-radius:10px;color:#222;font-size:22px}.qty-right strong{margin-left:8px}.subtotal{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #ede5dc;padding:13px 0;font-weight:850}.section-label{font-size:12px;color:#956d3b;font-weight:850;margin:18px 0 3px}.login-outer{min-height:100dvh;background:#171717;display:flex;flex-direction:column}.login-outer .page{width:100%;max-width:520px}.login-brand{text-align:center;color:#e87524;font-size:45px;font-weight:1000;letter-spacing:-2px;margin:34px 0}.login-brand small{display:block;color:#e6b52d;font-size:12px;font-weight:700;letter-spacing:3px}.login-card{padding:26px 21px;background:#252525;color:#fffaf0;border-radius:20px}.login-card h1{font-size:25px}.login-card p{color:#b7b1aa;font-size:14px}.login-card label{color:#ddd}.login-card .field{background:#fffaf0}.login-card .primary{width:100%;margin-top:20px}.btn-row{display:flex;gap:10px;align-items:center}.btn-row button{flex:1}.pay-select{display:flex;gap:9px}.pay-select .choice{min-height:58px;flex:1;text-align:center}.bill-item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eee7dd;font-size:14px}.bill-item div:last-child{white-space:nowrap;text-align:right}.bill-total{font-size:22px}.cash-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cash-btns button{min-height:52px}.screen-loader{padding:40px 20px;text-align:center}.print-only{display:none}#toast{position:fixed;z-index:100;bottom:90px;left:50%;transform:translateX(-50%);background:#202020;color:#fff;border-radius:12px;padding:12px 16px;max-width:90vw;font-size:13px;text-align:center;box-shadow:0 5px 16px #0003}
+@media(min-width:560px){.tables{grid-template-columns:repeat(4,minmax(0,1fr))}.fields{grid-template-columns:1fr 1fr}.table{min-height:145px}}@media print{@page{margin:3mm}body{background:#fff!important;color:#000!important}body> :not(#print-area){display:none!important}#print-area{display:block!important;font-family:monospace!important;max-width:76mm;margin:auto;color:#000!important;font-size:11px}#print-area *{color:#000!important}#print-area .pr-line{border-top:1px dashed #444;padding-top:7px;margin-top:7px}.no-print{display:none!important}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">MAJJOS</div>
-  <div class="subtitulo">
-    SISTEMA DE MESERO Y CAJA
+<div id="login" class="login-outer">
+  <header class="head"><div class="brand">ma<b>jj</b>os</div><div class="head-right">ACCESO DE PERSONAL<small>MESERO · CAJA</small></div></header>
+  <main class="page"><div class="login-brand">MAJJOS<small>EL ANTOJO TIENE NOMBRE</small></div>
+  <div class="login-card"><h1>Iniciar sesión</h1><p>Ingresa con el usuario de Mesero, Caja o Administrador.</p>
+  <form id="login-form"><label for="email">Correo</label><input id="email" class="field" type="email" required autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Correo electrónico">
+  <label for="password">Contraseña</label><input id="password" class="field" type="password" required autocomplete="current-password" placeholder="Contraseña">
+  <button id="login-button" class="primary" type="submit">INGRESAR</button></form><p id="login-status" class="status" role="status"></p></div></main>
+</div>
+<div id="workspace" hidden>
+  <header class="head"><div class="brand">ma<b>jj</b>os</div><div class="head-right" id="role-title">PERSONAL<small>VERSIÓN DE PRUEBA</small><button id="logout" type="button">Cerrar sesión</button></div></header>
+  <div id="home" class="page">
+    <p class="note">Sistema conectado a Supabase. Todavía no se usa para cobros reales: promociones, adiciones e impresión automática pendientes.</p>
+    <div class="title-row"><div><div class="eyebrow">SISTEMA INTERNO</div><h1 id="home-title">Mesas y pedidos</h1></div><div class="pill" id="home-pill">7 mesas</div></div>
+    <div id="mesero-home" hidden>
+      <h2>Salón</h2><div id="table-list" class="tables"></div>
+      <div class="shortcuts"><button type="button" id="new-pickup" class="shortcut"><span>🛍️</span>Nuevo para llevar</button><button type="button" id="new-delivery" class="shortcut gold"><span>🛵</span>Nuevo domicilio</button></div>
+      <h2>Para llevar y domicilios abiertos</h2><div id="other-orders"></div>
+    </div>
+    <div id="caja-home" hidden><h2>Pedidos pendientes de cobro</h2><div id="cash-orders"></div></div>
+    <p id="home-status" class="status" role="status"></p><button id="refresh" class="outline">⟳ Actualizar</button>
   </div>
-</header>
-
-<main>
-
-<section id="acceso" class="tarjeta">
-  <h2>Iniciar sesión</h2>
-  <p>Ingresa con tu usuario de MAJJOS.</p>
-
-  <form id="formulario">
-    <input
-      id="correo"
-      type="email"
-      placeholder="Correo electrónico"
-      autocomplete="username"
-      required
-    >
-    <input
-      id="clave"
-      type="password"
-      placeholder="Contraseña"
-      autocomplete="current-password"
-      required
-    >
-    <button id="entrar" type="submit">
-      INGRESAR
-    </button>
-  </form>
-
-  <p id="mensaje" class="mensaje"></p>
-</section>
-
-<section id="panel" hidden>
-  <div class="tarjeta">
-    <h2 id="tituloPanel"></h2>
-    <p id="usuario"></p>
-    <button id="actualizar" class="secundario">
-      Actualizar información
-    </button>
-    <button id="salir" class="secundario">
-      Cerrar sesión
-    </button>
-    <p id="estado" class="mensaje"></p>
+  <div id="order-page" class="page with-cart" hidden>
+    <button type="button" class="outline" id="back-home">← Volver a mesas</button>
+    <div class="eyebrow" style="margin-top:22px">TOMAR PEDIDO</div><h1 id="order-name">Mesa</h1>
+    <div class="card" id="customer-card" hidden><h2>Datos del cliente</h2>
+      <label for="customer-name">Nombre</label><input id="customer-name" class="field" maxlength="100" placeholder="Nombre del cliente">
+      <div id="delivery-fields" hidden><div class="fields"><div><label for="customer-phone">Teléfono</label><input class="field" id="customer-phone" type="tel" maxlength="30" placeholder="Celular"></div><div><label for="delivery-fee">Valor domicilio ($)</label><input class="field" id="delivery-fee" type="number" min="0" max="100000" step="100" value="0"></div></div>
+      <label for="customer-address">Dirección</label><input class="field" id="customer-address" maxlength="250" placeholder="Dirección de entrega"></div>
+      <p class="muted tiny" id="customer-message"></p>
+    </div>
+    <div class="card"><input id="product-search" class="field" type="search" placeholder="🔎 Buscar producto…">
+      <div id="category-list" class="category-scroll"></div><div id="product-list"></div><p id="order-status" class="status"></p></div>
+    <div class="cart-bar"><button id="cart-open" type="button" class="primary"><span id="cart-qty" class="badge-count">0</span><span>Ver pedido</span><span id="cart-total">$ 0</span></button></div>
   </div>
-
-  <div id="seccionMesas" class="tarjeta" hidden>
-    <h2>Mesas del restaurante</h2>
-    <div id="listaMesas" class="mesas"></div>
+  <div id="cash-detail" class="page" hidden>
+    <button id="back-cash" class="outline">← Volver a Caja</button><div class="eyebrow" style="margin-top:20px">CAJA</div><h1 id="cash-title">Pedido</h1>
+    <div class="card" id="cash-details"></div>
+    <div class="card"><h2>Forma de pago</h2><div class="pay-select"><button class="choice picked" id="pay-cash">Efectivo</button><button class="choice" id="pay-transfer">Transferencia</button></div>
+      <p class="muted tiny">La cuenta solo se cerrará cuando confirmes el cobro.</p><div class="cash-btns"><button type="button" id="print-bill" class="outline">🧾 Imprimir cuenta</button><button type="button" id="charge" class="primary">Cobrar pedido</button></div><p id="cash-status" class="status"></p></div>
   </div>
-
-  <div id="seccionPedidos" class="tarjeta">
-    <h2>Pedidos abiertos</h2>
-    <div id="listaPedidos"></div>
-  </div>
-</section>
-
-</main>
-
+</div>
+<div id="config-modal" class="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-label="Elegir producto">
+  <div class="sheet-title"><h2 id="config-name">Producto</h2><button id="close-config" type="button" class="outline close">✕</button></div>
+  <div id="variant-list"></div><label for="item-note">Observaciones</label><textarea id="item-note" class="field" maxlength="400" rows="2" placeholder="Ej. Sin cebolla"></textarea>
+  <div class="title-row"><div><label>Cantidad</label><div class="qty"><button type="button" id="qty-minus">−</button><b id="qty-value">1</b><button id="qty-plus" type="button">+</button></div></div><div class="right"><label>Total</label><b id="config-price"></b></div></div>
+  <div class="sheet-footer"><button id="cancel-config" class="outline">Cancelar</button><button id="add-draft" class="primary">Agregar</button></div>
+</div></div>
+<div id="cart-modal" class="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-label="Revisar pedido">
+  <div class="sheet-title"><h2>Ver pedido</h2><button id="close-cart" class="outline close">✕</button></div>
+  <div id="saved-items"></div><div id="draft-items"></div><div id="cart-totals"></div><p id="save-status" class="status"></p>
+  <div class="sheet-footer"><button id="keep-adding" class="outline">Seguir agregando</button><button id="save-items" class="primary">Guardar pedido</button></div>
+</div></div>
+<div id="toast" hidden role="status"></div>
+<div id="print-area" class="print-only"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const URL_SUPABASE =
-  "https://ytzwtawidgvterrselkd.supabase.co";
-
-const CLAVE_PUBLICA =
-  "sb_publishable_9HnDHalyoRhcNllJgtRewQ_-F8ydzGZ";
-
-const db = window.supabase.createClient(
-  URL_SUPABASE,
-  CLAVE_PUBLICA
-);
-
-const elemento = id =>
-  document.getElementById(id);
-
-let rolActual = "";
-
-elemento("formulario").addEventListener(
-  "submit",
-  async function(evento){
-    evento.preventDefault();
-
-    const boton = elemento("entrar");
-    boton.disabled = true;
-    elemento("mensaje").textContent =
-      "Verificando acceso...";
-
-    try{
-      const correo =
-        elemento("correo").value.trim();
-
-      const clave = elemento("clave").value;
-
-      const {error} =
-        await db.auth.signInWithPassword({
-          email:correo,
-          password:clave
-        });
-
-      if(error) throw error;
-
-      elemento("clave").value = "";
-      await verificarUsuario();
-
-    }catch(error){
-      elemento("mensaje").textContent =
-        "No se pudo ingresar: " + error.message;
-    }finally{
-      boton.disabled = false;
-    }
+'use strict';
+const SUPABASE_URL = 'https://ytzwtawidgvterrselkd.supabase.co';
+const SUPABASE_PUBLIC_KEY = 'sb_publishable_9HnDHalyoRhcNllJgtRewQ_-F8ydzGZ';
+const $ = id => document.getElementById(id);
+const money = n => '$ ' + new Intl.NumberFormat('es-CO',{maximumFractionDigits:0}).format(Number(n)||0);
+const num = n => Number(n)||0;
+const str = s => String(s??'');
+const make = (t,c,txt) => {let e=document.createElement(t);if(c)e.className=c;if(txt!==undefined)e.textContent=str(txt);return e;};
+let db, role='', user=null, orders=[], current=null, catalog=[], categories=[], saved=[], draft=[], category='', selected=null, variant=null, quantity=1, requestToken=0, saving=false, charging=false, bill=null, payment='efectivo';
+const roleNames={mesero:'MESERO',caja:'CAJA',administrador:'ADMINISTRADOR'};
+let toastTimer;
+function toast(msg){$('toast').textContent=msg;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3000)}
+function status(id,msg,isError=false){$(id).textContent=msg;$(id).classList.toggle('error',isError)}
+function show(id){for(let k of ['home','order-page','cash-detail'])$(k).hidden=(k!==id)}
+function orderLabel(o){return o.tipo==='mesa'?'Mesa '+String(o.mesa_id).padStart(2,'0'):o.tipo==='para_llevar'?'Para llevar':'Domicilio'}
+function isBurger(name){return /^(.+?)\s*[-–]\s*(Solo|Con papas)$/i.exec(str(name))}
+function draftSum(){return draft.reduce((s,x)=>s+num(x.product.price)*x.cantidad,0)}
+function savedSum(){return saved.reduce((s,x)=>s+num(x.precio_unitario)*x.cantidad,0)}
+function getFee(){return current?.tipo==='domicilio'?Math.max(0,num($('delivery-fee').value)):0}
+function updateCartBadge(){$('cart-qty').textContent=draft.reduce((s,x)=>s+x.cantidad,0);$('cart-total').textContent=money(draftSum()+savedSum()+getFee());$('save-items').disabled=saving||draft.length===0}
+function formatError(e){return str(e?.message||e||'Error desconocido')}
+function clientReady(){if(!window.supabase?.createClient){status('login-status','No se pudo cargar Supabase. Comprueba la conexión a internet.',true);return false}db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);return true}
+async function validateSession(){
+  if(!db)return;
+  const {data,error}=await db.auth.getUser();
+  if(error||!data?.user){user=null;role='';$('workspace').hidden=true;$('login').hidden=false;return}
+  const profile=await db.from('majjos_staff').select('rol,activo').eq('user_id',data.user.id).maybeSingle();
+  if(profile.error||!profile.data?.activo||!roleNames[profile.data.rol]){
+    await db.auth.signOut();$('workspace').hidden=true;$('login').hidden=false;
+    status('login-status','El usuario no tiene un perfil MAJJOS activo.',true);return;
   }
-);
-
-async function verificarUsuario(){
-  const {data,error} = await db.auth.getUser();
-
-  if(error || !data.user){
-    elemento("acceso").hidden = false;
-    elemento("panel").hidden = true;
-    return;
-  }
-
-  const usuario = data.user;
-
-  const resultado = await db
-    .from("majjos_staff")
-    .select("rol,activo")
-    .eq("user_id",usuario.id)
-    .maybeSingle();
-
-  if(
-    resultado.error ||
-    !resultado.data ||
-    !resultado.data.activo
-  ){
-    await db.auth.signOut();
-    elemento("mensaje").textContent =
-      "Este usuario no tiene un perfil activo.";
-    elemento("acceso").hidden = false;
-    elemento("panel").hidden = true;
-    return;
-  }
-
-  rolActual = resultado.data.rol;
-
-  const nombres = {
-    mesero:"MAJJOS Mesero",
-    caja:"MAJJOS Caja",
-    administrador:"MAJJOS Administrador"
-  };
-
-  elemento("tituloPanel").textContent =
-    nombres[rolActual] || "MAJJOS Personal";
-
-  elemento("usuario").textContent = usuario.email;
-
-  elemento("acceso").hidden = true;
-  elemento("panel").hidden = false;
-
-  elemento("seccionMesas").hidden =
-    rolActual === "caja";
-
-  await cargarInformacion();
+  user=data.user;role=profile.data.rol;
+  $('login').hidden=true;$('workspace').hidden=false;
+  $('role-title').firstChild.textContent=roleNames[role];
+  $('home-title').textContent=role==='mesero'?'Mesas y pedidos':'Pedidos y cobros';
+  $('home-pill').textContent=role==='mesero'?'7 mesas':'Caja';
+  $('mesero-home').hidden=role!=='mesero';$('caja-home').hidden=role==='mesero';
+  show('home');await refreshHome();
 }
-
-async function cargarInformacion(){
-  elemento("estado").textContent =
-    "Consultando Supabase...";
-
+async function refreshHome(){
+  if(!role)return;const token=++requestToken;status('home-status','Actualizando…');
+  const r=await db.from('majjos_orders').select('id,tipo,mesa_id,nombre_cliente,telefono_cliente,direccion_cliente,costo_domicilio,estado,creado_en').eq('estado','abierto').order('creado_en',{ascending:false});
+  if(token!==requestToken)return;
+  if(r.error){status('home-status','No se pudieron consultar los pedidos: '+formatError(r.error),true);return;}
+  orders=r.data||[];
+  if(role==='mesero'){
+    const grid=$('table-list');grid.replaceChildren();
+    for(let n=1;n<=7;n++){
+      let occupied=orders.some(o=>o.tipo==='mesa'&&Number(o.mesa_id)===n);
+      const b=make('button','table');b.type='button';
+      const top=make('div','table-top');top.append(make('strong','table-title','Mesa '+String(n).padStart(2,'0')),make('span','table-icon','🍽️'));
+      const st=make('div','table-state'+(occupied?' busy':''));st.append(make('i','dot'),make('span','',occupied?'Ocupada':'Disponible'));
+      b.append(top,st);b.addEventListener('click',()=>openOrder('mesa',n));grid.append(b);
+    }
+    const list=$('other-orders');list.replaceChildren();
+    const others=orders.filter(o=>o.tipo!=='mesa');
+    if(!others.length)list.append(make('p','muted','No hay pedidos abiertos para llevar ni domicilios.'));
+    for(const o of others){const b=make('button','open-order');b.type='button';const info=make('div');info.append(make('strong','',orderLabel(o)),make('small','',o.nombre_cliente||'Pedido abierto'));b.append(info,make('span','','›'));b.addEventListener('click',()=>openOrder(o.tipo,null,o.id));list.append(b)}
+  }else{
+    const list=$('cash-orders');list.replaceChildren();
+    if(!orders.length)list.append(make('p','muted','No hay pedidos pendientes de cobro.'));
+    for(const o of orders){const b=make('button','open-order');b.type='button';const info=make('div');info.append(make('strong','',orderLabel(o)),make('small','',o.nombre_cliente||'Pendiente de cobro'));b.append(info,make('span','','›'));b.addEventListener('click',()=>openBill(o));list.append(b)}
+  }
+  status('home-status','Conectado con Supabase · '+orders.length+' pedido(s) abierto(s).');
+}
+function groupProducts(){const map=new Map();for(const p of catalog){if(p.price==null||num(p.price)<0)continue;const match=isBurger(p.name);const title=match?match[1].trim():p.name;const key=match?p.category_id+'|'+title.toLocaleLowerCase('es'):p.id;if(!map.has(key))map.set(key,{title,category_id:p.category_id,options:[]});map.get(key).options.push(p)}return Array.from(map.values())}
+function renderCats(){const bar=$('category-list');bar.replaceChildren();for(const c of [{id:'',name:'Todos'},...categories]){let b=make('button','category'+(category===c.id?' selected':''),c.name);b.type='button';b.addEventListener('click',()=>{category=c.id;renderCats();renderProducts();});bar.append(b)}}
+function renderProducts(){const area=$('product-list');area.replaceChildren();let search=$('product-search').value.trim().toLocaleLowerCase('es');const list=groupProducts().filter(p=>(!category||p.category_id===category)&&(!search||p.title.toLocaleLowerCase('es').includes(search)));
+  if(!list.length){area.append(make('p','muted','No hay productos activos en esta categoría.'));return}
+  for(const p of list){let r=make('div','product'),info=make('div');info.style.flex='1';info.append(make('strong','',p.title),make('small','',p.options.length>1?'Desde '+money(Math.min(...p.options.map(x=>num(x.price)))):money(p.options[0].price)));let b=make('button','plus','+');b.type='button';b.setAttribute('aria-label','Agregar '+p.title);b.addEventListener('click',()=>chooseProduct(p));r.append(info,b);area.append(r)}
+}
+function setCustomerFields(){const existing=!!current.id;const d=current.customer||{};
+  $('customer-card').hidden=current.tipo==='mesa';$('delivery-fields').hidden=current.tipo!=='domicilio';
+  $('customer-name').value=d.nombre_cliente||'';$('customer-phone').value=d.telefono_cliente||'';$('customer-address').value=d.direccion_cliente||'';$('delivery-fee').value=d.costo_domicilio||0;
+  for(const id of ['customer-name','customer-phone','customer-address','delivery-fee'])$(id).disabled=existing;
+  $('customer-message').textContent=existing?'Pedido guardado: datos del cliente bloqueados en esta versión.':'El pedido se crea al guardar el primer producto.';
+}
+async function fetchSaved(){saved=[];if(!current?.id)return;const r=await db.from('majjos_order_items').select('id,order_id,product_id,nombre_producto,cantidad,precio_unitario,observaciones,estado_comanda,creado_en').eq('order_id',current.id).order('creado_en',{ascending:true});if(r.error)throw r.error;saved=r.data||[]}
+async function findOpenTable(n){const r=await db.from('majjos_orders').select('id,tipo,mesa_id,nombre_cliente,telefono_cliente,direccion_cliente,costo_domicilio').eq('tipo','mesa').eq('mesa_id',n).eq('estado','abierto').limit(1);if(r.error)throw r.error;return r.data?.[0]||null}
+async function openOrder(tipo,mesa=null,id=null){if(role!=='mesero')return;
+  const token=++requestToken;
+  current={tipo,mesa_id:mesa,id:id||null,customer:null};catalog=[];categories=[];saved=[];draft=[];category='';
+  $('order-name').textContent=orderLabel(current);$('product-search').value='';$('product-list').replaceChildren();$('category-list').replaceChildren();
+  $('config-modal').hidden=true;$('cart-modal').hidden=true;show('order-page');status('order-status','Cargando productos…');updateCartBadge();window.scrollTo(0,0);
   try{
-    const respuesta = await db
-      .from("majjos_orders")
-      .select(
-        "id,tipo,mesa_id,nombre_cliente,estado"
-      )
-      .eq("estado","abierto")
-      .order("creado_en",{ascending:false});
-
-    if(respuesta.error) throw respuesta.error;
-
-    const pedidos = respuesta.data || [];
-
-    if(rolActual !== "caja"){
-      const mesasRespuesta = await db
-        .from("majjos_tables")
-        .select("id,nombre")
-        .order("id");
-
-      if(mesasRespuesta.error)
-        throw mesasRespuesta.error;
-
-      const ocupadas = new Set(
-        pedidos
-          .filter(p => p.tipo === "mesa")
-          .map(p => p.mesa_id)
-      );
-
-      const contenedor =
-        elemento("listaMesas");
-
-      contenedor.replaceChildren();
-
-      for(const mesa of mesasRespuesta.data){
-        const tarjeta =
-          document.createElement("div");
-
-        tarjeta.className = "mesa";
-
-        const nombre =
-          document.createElement("strong");
-
-        nombre.textContent = mesa.nombre;
-
-        const estado =
-          document.createElement("span");
-
-        const ocupada = ocupadas.has(mesa.id);
-
-        estado.textContent =
-          ocupada ? "Ocupada" : "Disponible";
-
-        estado.className =
-          ocupada ? "ocupada" : "libre";
-
-        tarjeta.append(nombre,estado);
-        contenedor.append(tarjeta);
-      }
-    }
-
-    const lista = elemento("listaPedidos");
-    lista.replaceChildren();
-
-    if(pedidos.length === 0){
-      lista.textContent =
-        "No hay pedidos abiertos.";
-    }
-
-    for(const pedido of pedidos){
-      const fila =
-        document.createElement("div");
-
-      fila.className = "pedido";
-
-      const descripcion =
-        pedido.tipo === "mesa"
-          ? "Mesa " + pedido.mesa_id
-          : pedido.tipo === "domicilio"
-          ? "Domicilio"
-          : "Para llevar";
-
-      const titulo =
-        document.createElement("strong");
-
-      titulo.textContent = descripcion;
-
-      const detalle =
-        document.createElement("div");
-
-      detalle.textContent =
-        pedido.nombre_cliente ||
-        "Pedido pendiente de cobro";
-
-      const referencia =
-        document.createElement("small");
-
-      referencia.textContent =
-        "Pedido: " + pedido.id.slice(0,8);
-
-      fila.append(titulo,detalle,referencia);
-      lista.append(fila);
-    }
-
-    elemento("estado").textContent =
-      "Conectado con Supabase.";
-
-  }catch(error){
-    elemento("estado").textContent =
-      "Error al consultar datos: " +
-      error.message;
-  }
+    // Las mesas disponibles abren el menú SIN crear un pedido vacío.
+    const results=await Promise.all([
+      id?db.from('majjos_orders').select('id,tipo,mesa_id,nombre_cliente,telefono_cliente,direccion_cliente,costo_domicilio').eq('id',id).eq('estado','abierto').limit(1).then(r=>r.error?Promise.reject(r.error):r.data?.[0]||null):tipo==='mesa'?findOpenTable(mesa):Promise.resolve(null),
+      db.from('categories').select('id,name').eq('active',true).order('name'),
+      db.from('products').select('id,name,category_id,price,sort_order').eq('active',true).order('sort_order',{ascending:true})
+    ]);
+    if(token!==requestToken)return;
+    const existing=results[0],cats=results[1],prods=results[2];if(cats.error)throw cats.error;if(prods.error)throw prods.error;
+    if(id&&!existing)throw Error('Este pedido ya está cerrado. Regresa al inicio.');
+    if(existing){current.id=existing.id;current.customer=existing}
+    categories=cats.data||[];catalog=prods.data||[];
+    category=categories.find(c=>/hamburguesas/i.test(c.name))?.id||'';
+    setCustomerFields();await fetchSaved();if(token!==requestToken)return;
+    renderCats();renderProducts();updateCartBadge();
+    status('order-status',current.id?'Pedido abierto. Puedes seguir agregando productos.':'Mesa disponible. Selecciona productos y guarda el primer pedido.');
+  }catch(e){if(token===requestToken)status('order-status','No se pudo cargar el pedido: '+formatError(e),true)}
 }
-
-elemento("actualizar").onclick =
-  cargarInformacion;
-
-elemento("salir").onclick =
-  async function(){
-    await db.auth.signOut();
-    rolActual = "";
-    elemento("panel").hidden = true;
-    elemento("acceso").hidden = false;
-    elemento("mensaje").textContent = "";
-  };
-
-verificarUsuario().catch(error => {
-  elemento("mensaje").textContent =
-    "Error de conexión: " + error.message;
-});
+function chooseProduct(g){selected=g;variant=g.options.find(x=>/[-–]\s*Solo$/i.test(x.name))||g.options[0];quantity=1;$('item-note').value='';$('config-name').textContent=g.title;renderVariants();$('config-modal').hidden=false}
+function renderVariants(){let area=$('variant-list');area.replaceChildren();if(selected.options.length>1){area.append(make('label','','Presentación'));const grid=make('div','choice-grid');for(const p of selected.options){let m=isBurger(p.name);let b=make('button','choice'+(variant?.id===p.id?' picked':''));b.type='button';b.append(make('span','',m?m[2]:'Opción'),make('small','',money(p.price)));b.addEventListener('click',()=>{variant=p;renderVariants()});grid.append(b)}area.append(grid)}$('qty-value').textContent=quantity;$('config-price').textContent=money(num(variant?.price)*quantity)}
+function addDraft(){if(!variant||!current)return;const note=$('item-note').value.trim();const x=draft.find(x=>x.product.id===variant.id&&x.note===note);if(x)x.cantidad+=quantity;else draft.push({product:variant,cantidad:quantity,note});$('config-modal').hidden=true;updateCartBadge();toast('Producto agregado al pedido')}
+function renderCart(){const old=$('saved-items'),un=$('draft-items'),tot=$('cart-totals');old.replaceChildren();un.replaceChildren();tot.replaceChildren();if(saved.length){old.append(make('h3','section-label','GUARDADOS EN SUPABASE'));for(const p of saved){let r=make('div','row-item');r.append(make('strong','',p.cantidad+' × '+p.nombre_producto),make('small','',money(num(p.precio_unitario)*p.cantidad)));if(p.observaciones)r.append(make('small','','Obs.: '+p.observaciones));r.append(make('small','',p.estado_comanda==='enviada'?'Comanda marcada como enviada':'Comanda pendiente'));old.append(r)}}
+  un.append(make('h3','section-label','PRODUCTOS NUEVOS'));if(!draft.length)un.append(make('p','muted','No hay productos nuevos.'));
+  draft.forEach((x,ix)=>{let r=make('div','row-item');r.append(make('strong','',x.product.name),make('small','',money(x.product.price)+' por unidad'));if(x.note)r.append(make('small','','Obs.: '+x.note));let control=make('div','qty-right'),minus=make('button','','−'),plus=make('button','','+');minus.type='button';plus.type='button';minus.setAttribute('aria-label','Restar');plus.setAttribute('aria-label','Sumar');minus.addEventListener('click',()=>{x.cantidad--;if(x.cantidad<=0)draft.splice(ix,1);renderCart()});plus.addEventListener('click',()=>{x.cantidad=Math.min(99,x.cantidad+1);renderCart()});control.append(minus,make('b','',x.cantidad),plus,make('strong','',money(num(x.product.price)*x.cantidad)));r.append(control);un.append(r)});
+  if(getFee())addTotal(tot,'Domicilio',getFee());addTotal(tot,'TOTAL',savedSum()+draftSum()+getFee());updateCartBadge()}
+function addTotal(box,label,price){let r=make('div','subtotal');r.append(make('span','',label),make('strong','',money(price)));box.append(r)}
+function readCustomer(){if(current.tipo==='mesa')return {};
+  const name=$('customer-name').value.trim();if(!name)throw Error('Falta el nombre del cliente.');if(current.tipo==='para_llevar')return {nombre_cliente:name};
+  const phone=$('customer-phone').value.trim(),address=$('customer-address').value.trim(),fee=Number($('delivery-fee').value);
+  if(!phone||!address)throw Error('Completa el teléfono y la dirección.');if(!Number.isFinite(fee)||fee<0||fee>100000)throw Error('El costo del domicilio no es válido.');
+  return {nombre_cliente:name,telefono_cliente:phone,direccion_cliente:address,costo_domicilio:fee};
+}
+async function saveOrder(){if(saving||!current||!draft.length)return;saving=true;updateCartBadge();status('save-status','Guardando pedido…');
+  try{
+    if(!current.id){const customer=readCustomer();const newOrder={tipo:current.tipo,mesa_id:current.mesa_id,...customer};
+      const result=await db.from('majjos_orders').insert(newOrder).select('id').single();
+      if(result.error){if(current.tipo==='mesa'){
+        const existing=await findOpenTable(current.mesa_id);
+        if(!existing)throw result.error;
+        current.id=existing.id;current.customer=existing;
+      }else throw result.error;
+      }else{current.id=result.data.id;current.customer={...newOrder,id:result.data.id}}
+    }
+    const lines=draft.map(x=>({order_id:current.id,product_id:x.product.id,nombre_producto:x.product.name,cantidad:x.cantidad,precio_unitario:x.product.price,adiciones:[],observaciones:x.note||null}));
+    const res=await db.from('majjos_order_items').insert(lines);if(res.error)throw res.error;
+    draft=[];await fetchSaved();setCustomerFields();renderCart();updateCartBadge();
+    status('save-status','Pedido guardado correctamente. La comanda todavía NO se ha impreso.');status('order-status','Pedido guardado en Supabase.');toast('Pedido guardado');
+  }catch(e){status('save-status','No se pudo guardar: '+formatError(e),true);toast('Revisa el mensaje de guardado')}
+  finally{saving=false;updateCartBadge()}
+}
+function backHome(){if(saving)return;if(draft.length&&!confirm('Hay productos sin guardar. ¿Descartarlos y volver?'))return;current=null;draft=[];saved=[];$('cart-modal').hidden=true;$('config-modal').hidden=true;show('home');refreshHome();window.scrollTo(0,0)}
+async function openBill(order){if(role==='mesero')return;const token=++requestToken;bill={order,items:[],totals:null};$('cash-title').textContent=orderLabel(order);$('cash-details').replaceChildren();status('cash-status','');payment='efectivo';renderPayment();show('cash-detail');status('cash-status','Cargando cuenta…');window.scrollTo(0,0);
+  try{const [items,totals]=await Promise.all([
+    db.from('majjos_order_items').select('id,nombre_producto,cantidad,precio_unitario,observaciones,estado_comanda').eq('order_id',order.id),
+    db.rpc('majjos_total_pedido',{p_pedido:order.id})
+  ]);if(token!==requestToken)return;if(items.error)throw items.error;if(totals.error)throw totals.error;
+    bill.items=items.data||[];bill.totals=Array.isArray(totals.data)?totals.data[0]:totals.data;
+    renderBill();status('cash-status','Cuenta consultada en Supabase.');
+  }catch(e){status('cash-status','No se pudo cargar la cuenta: '+formatError(e),true)}
+}
+function renderBill(){let a=$('cash-details');a.replaceChildren();const o=bill.order;
+  if(o.nombre_cliente)a.append(make('p','',o.nombre_cliente));
+  if(o.tipo==='domicilio')a.append(make('p','muted',str(o.telefono_cliente)+' · '+str(o.direccion_cliente)));
+  if(!bill.items.length)a.append(make('p','muted','El pedido todavía no tiene productos.'));
+  bill.items.forEach(i=>{let r=make('div','bill-item');let info=make('div');info.append(make('strong','',i.cantidad+' × '+i.nombre_producto));if(i.observaciones)info.append(make('small','',i.observaciones));r.append(info,make('div','',money(num(i.cantidad)*num(i.precio_unitario))));a.append(r)});
+  const total=bill.totals;if(total){addTotal(a,'Subtotal',total.subtotal);if(num(total.domicilio))addTotal(a,'Domicilio',total.domicilio);addTotal(a,'TOTAL',total.total)}
+  $('charge').disabled=!total||!bill.items.length; $('print-bill').disabled=!total||!bill.items.length;
+}
+function renderPayment(){$('pay-cash').classList.toggle('picked',payment==='efectivo');$('pay-transfer').classList.toggle('picked',payment==='transferencia')}
+async function chargeOrder(){if(charging||!bill?.totals||!bill.items.length)return;let amount=money(bill.totals.total);if(!confirm('¿Confirmar cobro de '+amount+' por '+payment+'?'))return;
+  charging=true;$('charge').disabled=true;status('cash-status','Registrando cobro…');
+  try{const r=await db.rpc('majjos_cobrar_pedido',{p_pedido:bill.order.id,p_forma_pago:payment});if(r.error)throw r.error;
+    status('cash-status','Cobro registrado. La mesa quedó disponible.');toast('Cobro registrado');$('charge').disabled=true;
+    // Conservamos la cuenta en pantalla para imprimir si el cajero lo decide.
+  }catch(e){status('cash-status','No se pudo cobrar: '+formatError(e),true);$('charge').disabled=false}
+  finally{charging=false}
+}
+function printBill(){if(!bill?.totals)return;const a=$('print-area');a.replaceChildren();a.append(make('h2','','MAJJOS'),make('div','',orderLabel(bill.order)),make('div','','Fecha: '+new Date().toLocaleString('es-CO')));
+  if(bill.order.nombre_cliente)a.append(make('div','','Cliente: '+bill.order.nombre_cliente));if(bill.order.tipo==='domicilio'){a.append(make('div','','Tel: '+str(bill.order.telefono_cliente)),make('div','','Dir: '+str(bill.order.direccion_cliente)))}
+  for(const x of bill.items){let r=make('div','pr-line');r.append(make('div','',x.cantidad+' × '+x.nombre_producto),make('div','right',money(num(x.cantidad)*num(x.precio_unitario))));a.append(r)}
+  addTotal(a,'Subtotal',bill.totals.subtotal);if(num(bill.totals.domicilio))addTotal(a,'Domicilio',bill.totals.domicilio);addTotal(a,'TOTAL',bill.totals.total);
+  a.append(make('div','pr-line','Gracias por tu compra · MAJJOS'));
+  window.print();
+}
+async function signOut(){requestToken++;await db.auth.signOut();user=null;role='';$('login').hidden=false;$('workspace').hidden=true;$('password').value='';status('login-status','');}
+function wire(){
+  $('login-form').addEventListener('submit',async e=>{e.preventDefault();let b=$('login-button');b.disabled=true;status('login-status','Conectando…');try{const r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(r.error)throw r.error;$('password').value='';await validateSession()}catch(x){status('login-status','No se pudo ingresar: '+formatError(x),true)}finally{b.disabled=false}});
+  $('logout').addEventListener('click',signOut);$('refresh').addEventListener('click',refreshHome);
+  $('new-pickup').addEventListener('click',()=>openOrder('para_llevar'));
+  $('new-delivery').addEventListener('click',()=>openOrder('domicilio'));
+  $('back-home').addEventListener('click',backHome);
+  $('product-search').addEventListener('input',renderProducts);$('delivery-fee').addEventListener('input',updateCartBadge);
+  $('close-config').addEventListener('click',()=>$('config-modal').hidden=true);$('cancel-config').addEventListener('click',()=>$('config-modal').hidden=true);
+  $('qty-minus').addEventListener('click',()=>{quantity=Math.max(1,quantity-1);renderVariants()});$('qty-plus').addEventListener('click',()=>{quantity=Math.min(99,quantity+1);renderVariants()});
+  $('add-draft').addEventListener('click',addDraft);
+  $('cart-open').addEventListener('click',()=>{renderCart();status('save-status','');$('cart-modal').hidden=false});
+  $('close-cart').addEventListener('click',()=>$('cart-modal').hidden=true);$('keep-adding').addEventListener('click',()=>$('cart-modal').hidden=true);$('save-items').addEventListener('click',saveOrder);
+  $('back-cash').addEventListener('click',()=>{show('home');refreshHome()});
+  $('pay-cash').addEventListener('click',()=>{payment='efectivo';renderPayment()});$('pay-transfer').addEventListener('click',()=>{payment='transferencia';renderPayment()});
+  $('print-bill').addEventListener('click',printBill);$('charge').addEventListener('click',chargeOrder);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&role&&!current&&!$('home').hidden)refreshHome()});
+}
+wire();if(clientReady())validateSession().catch(e=>status('login-status','Error de conexión: '+formatError(e),true));
 </script>
-
-<script src="mesero.js"></script>
-
 </body>
 </html>
