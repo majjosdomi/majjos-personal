@@ -108,7 +108,7 @@ function toast(msg){$('toast').textContent=msg;$('toast').hidden=false;clearTime
 function status(id,msg,isError=false){$(id).textContent=msg;$(id).classList.toggle('error',isError)}
 function show(id){for(let k of ['home','order-page','cash-detail'])$(k).hidden=(k!==id)}
 function orderLabel(o){return o.tipo==='mesa'?'Mesa '+String(o.mesa_id).padStart(2,'0'):o.tipo==='para_llevar'?'Para llevar':'Domicilio'}
-function isBurger(name){return /^(.+?)\s*[-–]\s*(Solo|Sin papas|Con papas)$/i.exec(str(name))}
+function isBurger(name){return /^(.+?)\s*(?:[-–—]\s*)?(Solo|Sin\s+papas|Con\s+papas)\s*$/i.exec(str(name))}
 function draftSum(){return draft.reduce((s,x)=>s+(num(x.product.price)+x.extras.reduce((t,a)=>t+num(a.price),0))*x.cantidad,0)}
 function savedSum(){return saved.reduce((s,x)=>s+num(x.precio_unitario)*x.cantidad,0)}
 function getFee(){return current?.tipo==='domicilio'?Math.max(0,num($('delivery-fee').value)):0}
@@ -213,7 +213,7 @@ async function openOrder(tipo,mesa=null,id=null){if(role!=='mesero')return;
     status('order-status',current.id?'Pedido abierto. Puedes seguir agregando productos.':'Mesa disponible. Selecciona productos y guarda el primer pedido.');
   }catch(e){if(token===requestToken)status('order-status','No se pudo cargar el pedido: '+formatError(e),true)}
 }
-function chooseProduct(g){selected=g;variant=g.options.find(x=>/[-–]\s*(Solo|Sin papas)$/i.test(x.name))||g.options[0];quantity=1;extraIds=new Set();configPanel='';$('item-note').value='';$('config-name').textContent=g.title;renderVariants();renderConfigTools();$('config-modal').hidden=false}
+function chooseProduct(g){selected=g;variant=g.options.find(x=>{const m=isBurger(x.name);return m&&/^(Solo|Sin\s+papas)$/i.test(m[2])})||g.options[0];quantity=1;extraIds=new Set();configPanel='';$('item-note').value='';$('config-name').textContent=g.title;renderVariants();renderConfigTools();$('config-modal').hidden=false}
 function renderVariants(){let area=$('variant-list');area.replaceChildren();if(selected.options.length>1){area.append(make('label','','¿Cómo la quieres?'));const grid=make('div','choice-grid');for(const p of selected.options){let m=isBurger(p.name);let b=make('button','choice'+(variant?.id===p.id?' picked':''));b.type='button';const label=m?(/con papas/i.test(m[2])?'Con papas':'Sin papas'):'Opción';b.append(make('span','',label),make('small','',money(p.price)));b.addEventListener('click',()=>{variant=p;renderVariants();renderConfigTools()});grid.append(b)}area.append(grid)}$('qty-value').textContent=quantity;$('config-price').textContent=money(unitPrice()*quantity)}
 function addDraft(){if(!variant||!current)return;const note=$('item-note').value.trim();const extras=selectedExtras(),extraSignature=extras.map(a=>a.id).sort().join('|');const x=draft.find(x=>x.product.id===variant.id&&x.note===note&&x.extras.map(a=>a.id).sort().join('|')===extraSignature);if(x)x.cantidad+=quantity;else draft.push({product:variant,cantidad:quantity,note,extras});$('config-modal').hidden=true;updateCartBadge();toast('Producto agregado al pedido')}
 function renderCart(){const old=$('saved-items'),un=$('draft-items'),tot=$('cart-totals');old.replaceChildren();un.replaceChildren();tot.replaceChildren();
